@@ -52,11 +52,11 @@ class RedCapSchema(BaseModel):
 
         #For every row in the df create a key:value pair describing that property
         self.properties = {
-            row['Variable / Field Name']: self._create_data_dictionary_item(row, index, use_numeric_values)
+            row['Variable / Field Name']: self._create_data_property(row, index, use_numeric_values)
             for index, row in df.iterrows()
         }
 
-    def _create_data_dictionary_item(self, row: pd.Series, index: int, use_numeric_values: bool) -> DataProperty:
+    def _create_data_property(self, row: pd.Series, index: int, use_numeric_values: bool) -> DataProperty:
         """Creates a DataProperty from a row of the CSV file."""
         var = row['Variable / Field Name']
         form_name = row['Form Name']
