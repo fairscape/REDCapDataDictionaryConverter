@@ -1,6 +1,6 @@
-from RedCapSchema import *
+from REDCapSchema import *
 
-redcap_schema = RedCapSchema(
+redcap_schema = REDCapSchema(
     name="Schema Name",
     description="Sample description for schema."
 )

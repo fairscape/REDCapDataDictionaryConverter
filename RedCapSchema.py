@@ -19,7 +19,7 @@ class DataProperty(BaseModel):
     minimum: Optional[float] = None
     maximum: Optional[float] = None
 
-class RedCapSchema(BaseModel):
+class REDCapSchema(BaseModel):
     """Represents a schema for a RedCap database, which can be converted to JSON-LD."""
     context: Dict[str, str] = Field(default=default_context, title="context", alias="@context")
     metadataType: str = Field(title="metadataType", alias="@type", default='EVI:Schema')
