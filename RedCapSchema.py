@@ -45,10 +45,10 @@ class RedCapSchema(BaseModel):
     def generate_regex_from_string(input_string: str) -> str:
         """Takes redcap rules for radio display and converts to allowed regex"""
         # Split the string into options
-        options = input_string.split(" | ")
+        options = [option.strip() for option in input_string.split("|")]
 
         # Extract the text portion of each option and escape special characters
-        text_options = [re.escape(option.split(", ")[1]) for option in options]
+        text_options = [re.escape(option.split(",")[1].strip()) for option in options]
 
         # Join the options with the pipe operator for the regex pattern
         pattern = f"^({'|'.join(text_options)})$"
@@ -63,9 +63,13 @@ class RedCapSchema(BaseModel):
         
         for index, row in df.iterrows():
             var = row['Variable / Field Name']
+            form_name = row['Form Name']
             description = row['Field Label']
+            if pd.isna(description) or description.strip() == '':
+                description = var + " " + form_name
             var_type = row['Field Type']
             type_details = row['Text Validation Type OR Show Slider Number']
+            choices = row['Choices, Calculations, OR Slider Labels']
 
             if var_type == 'yesno':
                 field_type = 'boolean'
@@ -77,7 +81,7 @@ class RedCapSchema(BaseModel):
                 if use_numeric_values:
                     field_type = 'integer'
                 else:
-                    pattern = self.generate_regex_from_string(row['Choices, Calculations, OR Slider Labels'])
+                    pattern = self.generate_regex_from_string(choices)
                     field_type = 'string'
             else:
                 field_type = 'string'
