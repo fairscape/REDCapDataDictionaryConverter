@@ -6,6 +6,7 @@ import re
 import json
 
 class DataDictionaryItem(BaseModel):
+    """Class that holds required information for a redcap variable"""
     field_name: str
     field_type: str
     description: str
@@ -15,6 +16,7 @@ class DataDictionaryItem(BaseModel):
     maximum: Optional[float] = None
 
 class RedCapSchema(BaseModel):
+    """Class for loading and converting redcap schema to json-ld"""
     metadataType: str = Field(
         title="metadataType",
         alias="@type",
@@ -25,7 +27,8 @@ class RedCapSchema(BaseModel):
     properties: Optional[List[DataDictionaryItem]] = []
 
     @staticmethod
-    def generate_regex_from_string(input_string):
+    def generate_regex_from_string(input_string: str) -> str:
+        """Takes redcap rules for radio display and converts to allowed regex"""
         # Split the string into options
         options = input_string.split(" | ")
 
@@ -37,8 +40,8 @@ class RedCapSchema(BaseModel):
 
         return pattern
 
-    def parse_schema_csv(self, file_path: str) -> None:
-        """Function to load schema file"""
+    def parse_schema_csv(self, file_path: str, use_numeric_values: bool = False) -> None:
+        """Function to parse input csv into properties"""
         df = pd.read_csv(file_path)
         properties = []
         pattern = None
@@ -56,8 +59,11 @@ class RedCapSchema(BaseModel):
             elif type_details == 'number':
                 field_type = 'number'
             elif var_type in ['radio', 'dropdown']:
-                field_type = 'string'
-                pattern = self.generate_regex_from_string(row['Choices, Calculations, OR Slider Labels'])
+                if use_numeric_values:
+                    field_type = 'integer'
+                else:
+                    pattern = self.generate_regex_from_string(row['Choices, Calculations, OR Slider Labels'])
+                    field_type = 'string'
             else:
                 field_type = 'string'
 
@@ -76,7 +82,7 @@ class RedCapSchema(BaseModel):
 
         self.properties = properties
 
-    def save_to_json(self, output_file: str):
+    def save_to_json(self, output_file: str) -> None:
         """Function to save the schema to a JSON file"""
         with open(output_file, 'w') as json_file:
             json.dump(self.model_dump(by_alias=True, exclude_none=True), json_file, indent=4)
