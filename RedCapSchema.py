@@ -1,10 +1,14 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 from pydantic import BaseModel, Field
 import pandas as pd
 import numpy as np
 import re
 import json
 
+default_context = {
+    "@vocab": "https://schema.org/",
+    "evi": "https://w3id.org/EVI#"
+}
 class DataDictionaryItem(BaseModel):
     """Class that holds required information for a redcap variable"""
     field_name: str
@@ -17,6 +21,11 @@ class DataDictionaryItem(BaseModel):
 
 class RedCapSchema(BaseModel):
     """Class for loading and converting redcap schema to json-ld"""
+    context: Dict[str, str] = Field(
+        default=default_context,
+        title="context",
+        alias="@context"
+    )
     metadataType: str = Field(
         title="metadataType",
         alias="@type",
@@ -25,6 +34,12 @@ class RedCapSchema(BaseModel):
     name: str = Field(max_length=200)
     description: str = Field(min_length=5)
     properties: Optional[List[DataDictionaryItem]] = []
+    type: Optional[str] = Field(default="object")
+    additionalProperties: Optional[bool] = Field(default=True)
+    required: Optional[List] = []
+    separator: Optional[str] = Field(default=",")
+    header: Optional[bool] = Field(default=True)
+    examples: Optional[List] = []
 
     @staticmethod
     def generate_regex_from_string(input_string: str) -> str:
