@@ -24,7 +24,7 @@ class RedCapSchema(BaseModel):
     context: Dict[str, str] = Field(default=default_context, title="context", alias="@context")
     metadataType: str = Field(title="metadataType", alias="@type", default='EVI:Schema')
     name: str = Field(max_length=200)
-    description: str = Field(min_length=5)
+    description: str = Field(min_length=4)
     properties: Optional[Dict[str, DataProperty]] = {}
     type: Optional[str] = Field(default="object")
     additionalProperties: Optional[bool] = Field(default=True)
