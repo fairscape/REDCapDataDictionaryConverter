@@ -16,7 +16,7 @@ redcap_schema = RedCapSchema(
 )
 
 # Parse the REDCap data dictionary CSV
-redcap_schema.parse_schema_csv('/path/to/red_cap_schema.csv')
+redcap_schema.parse_schema_csv('/path/to/red_cap_data_dictionary.csv')
 
 # Save the converted schema as JSON-LD
 redcap_schema.save_to_json('/output/path/converted_schema.json')
@@ -26,7 +26,7 @@ In this example, we first import the RedCapSchema class. We then create an insta
 
 ## Contribution
 
-If you'd like to request a feature or report a bug, please create a [GitHub Issue](https://github.com/fairscape/RedCapSchema/issues) using one of the templates provided.
+If you'd like to request a feature or report a bug, please create a [GitHub Issue](https://github.com/fairscape/REDCapDataDictionaryConverter/issues) using one of the templates provided.
 
 
 ## License
