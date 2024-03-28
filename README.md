@@ -23,3 +23,12 @@ redcap_schema.save_to_json('/output/path/converted_schema.json')
 ```
 
 In this example, we first import the RedCapSchema class. We then create an instance of RedCapSchema by providing a schema name and description. The parse_schema_csv method is used to read and parse the REDCap data dictionary CSV file. Finally, the save_to_json method saves the converted schema in JSON-LD format to the specified output path.
+
+## Contribution
+
+If you'd like to request a feature or report a bug, please create a [GitHub Issue](https://github.com/fairscape/RedCapSchema/issues) using one of the templates provided.
+
+
+## License
+
+This project is licensed under the terms of the MIT license.
