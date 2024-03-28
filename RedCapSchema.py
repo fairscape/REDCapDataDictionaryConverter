@@ -41,7 +41,9 @@ class RedCapSchema(BaseModel):
         pattern = f"^({'|'.join(text_options)})$"
         return pattern
 
-    def parse_schema_csv(self, file_path: str, use_numeric_values: bool = False) -> None:
+    def parse_schema_csv(
+            self, file_path: str, use_numeric_values: bool = False
+        ) -> None:
         """Parses a RedCap data dictionary CSV file to populate the schema properties."""
         try:
             df = pd.read_csv(file_path)
@@ -56,7 +58,9 @@ class RedCapSchema(BaseModel):
             for index, row in df.iterrows()
         }
 
-    def _create_data_property(self, row: pd.Series, index: int, use_numeric_values: bool) -> DataProperty:
+    def _create_data_property(
+            self, row: pd.Series, index: int, use_numeric_values: bool
+        ) -> DataProperty:
         """Creates a DataProperty from a row of the CSV file."""
         var = row['Variable / Field Name']
         form_name = row['Form Name']
@@ -84,7 +88,9 @@ class RedCapSchema(BaseModel):
             maximum=maximum
         )
 
-    def _determine_field_type_and_pattern(self, var_type: str, type_details: str, choices: str, use_numeric_values: bool) -> (str, Optional[str]):
+    def _determine_field_type_and_pattern(
+        self, var_type: str, type_details: str, choices: str, use_numeric_values: bool
+    ) -> (str, Optional[str]):
         """Determines the field type and pattern for a variable based on its RedCap type and details."""
         pattern = None
 
